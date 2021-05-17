@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "op_test.hpp"
+#include "../header/factory.hpp"
 
 TEST(Factory, normalAdd) {
         Factory* factory = new Factory();
