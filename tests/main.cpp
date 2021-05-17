@@ -14,6 +14,5 @@ else {
 }
 delete factory;
 delete calculate;
-
 return 0;
 }
