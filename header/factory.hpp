@@ -34,7 +34,7 @@ class Factory
 	Base* cur;
 	bool prevBool = false, curBool = false, isOper = false, isNumber = true;
 	char oper;
-	double Value;
+	double val;
 	string::size_type sz;
 	string s;
 	while(!q.empty())
@@ -44,8 +44,8 @@ class Factory
 	  if(!prevBool)
 	  {
 	    if(is_number(s)){
-	       Value = stod(s);
-	       prev = new Op(Value);
+	       val = stod(s);
+	       prev = new Op(val);
 	       prevBool = true;
 	    }
 	    else
@@ -56,18 +56,28 @@ class Factory
 	   }
 	  else if(prevBool && !isOper && !curBool)
 	  {
-	     if(s == "-") oper = '-';
-             else if(s == "+") oper = '+';
-             else if(s == "*") oper = '*';
-             else if(s == "/") oper = '/';
-             else if(s == "**") oper = '^';
-	     else return NULL;
+	     if(s == "-") {
+		 oper = '-';
+	     }             
+             else if(s == "+") {
+		oper = '+';
+             }     
+	     else if(s == "*") {
+		oper = '*';
+	     }             
+	    else if(s == "/") {
+		oper = '/';
+	    }            
+          else if(s == "**") {
+	        oper = '^';
+	     }	
+         else return NULL;
              isOper = true;	
 	  }
 	else{
 	  if(is_number(s)){
-	     Value = stod(s);
-	     cur = new Op(Value);
+	     val = stod(s);
+	     cur = new Op(val);
 	     prev = calculate(prev, cur, oper);
 	     isOper = false;
 	  }
@@ -79,16 +89,9 @@ class Factory
 	}
 	}
 	return prev;
-
 }
- /**
- *  * The purpose is to have the Base parse to pass on a past(a) value
- *   * it's operator and it's current(b) value
- *    * For example a \operator b
- *     * In which this class will handle the dynamic input from the user
- *      */
-    Base* calculate(Base* prevValue, Base* curValue, char operand)
-    {
+
+Base* calculate(Base* prevValue, Base* curValue, char operand) {
         switch(operand)
         {
            case '-' :
@@ -117,11 +120,8 @@ class Factory
         }
 
     }
- /**
- *  *Just checks if the string pass by Base parse is 
- *   *a number or not
- *    */
-   bool is_number(string str){
+   
+bool is_number(string str){
      for(int i = 0;i < (strlen(str.c_str()) - 1);i++) {
 		if(isdigit(str[i]) == false) return false;
 	}
