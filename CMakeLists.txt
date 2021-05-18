@@ -7,7 +7,7 @@ ADD_SUBDIRECTORY(googletest)
 ADD_EXECUTABLE(test
 	tests/factory_test.hpp
 	tests/unit_test.cpp
-}
+)
 
 ADD_EXECUTABLE(calculator
 	tests/main.cpp
