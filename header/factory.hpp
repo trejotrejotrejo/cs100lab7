@@ -1,80 +1,133 @@
 #ifndef __FACTORY_HPP__
 #define __FACTORY_HPP__
 
-#include "base.hpp"
-#include "add.hpp"
-#include "div.hpp"
-#include "mult.hpp"
-#include "op.hpp"
-#include "pow.hpp"
-#include "rand.hpp"
-#include "sub.hpp"
+#include "../header/add.hpp"
+#include "../header/div.hpp"
+#include "../header/mult.hpp"
+#include "../header/op.hpp"
+#include "../header/pow.hpp"
+#include "../header/rand.hpp"
+#include "../header/sub.hpp"
 
 #include <iostream>
-#include <string>
-#include <cctype>
-#include <ctype.h>
+#include <cstring>
+#include <vector>
+#include <stdlib.h>
 #include <queue>
 using namespace std;
 
-class Factory {
-	private:
-		queue<Base*> operands;
-		queue<string> operations;
-		queue<Base*> output;
 
-	public:
-		Factory() {};
+class Factory
+{
+  public:
+     Factory() { };
+     Base* parse(char** input, int length){
+	queue<string> q;
+	string str;
+	int counter = 0;
+        for(unsigned i = 1; i < length; i++){
+	   str = static_cast<string>(input[i]);
+           q.push(str);
+	   counter++;
+        }
+	Base* prev;
+	Base* cur;
+	bool prevBool = false, curBool = false, isOper = false, isNumber = true;
+	char oper;
+	double Value;
+	string::size_type sz;
+	string s;
+	while(!q.empty())
+	{
+	   s = q.front();
+	   q.pop();
+	  if(!prevBool)
+	  {
+	    if(is_number(s)){
+	       Value = stod(s);
+	       prev = new Op(Value);
+	       prevBool = true;
+	    }
+	    else
+	    {
+	       cout << "Invalid input" << endl;
+	       return NULL;
+	    }
+	   }
+	  else if(prevBool && !isOper && !curBool)
+	  {
+	     if(s == "-") oper = '-';
+             else if(s == "+") oper = '+';
+             else if(s == "*") oper = '*';
+             else if(s == "/") oper = '/';
+             else if(s == "**") oper = '^';
+	     else return NULL;
+             isOper = true;	
+	  }
+	else{
+	  if(is_number(s)){
+	     Value = stod(s);
+	     cur = new Op(Value);
+	     prev = calculate(prev, cur, oper);
+	     isOper = false;
+	  }
+	  else
+	  {
+	     cout << "Invalid input" << endl;
+	     return NULL;
+	  }
+	}
+	}
+	return prev;
 
-		Base* parse(char** input, int length) {
-	         for(int i = 1; i < length; i++) {
-                  if(isdigit(*input[i])) {
-                          int val = atoi(input[i]); //atoi function converts string to integer
-                          Base* temp = new Op(val);
-                          operands.push(temp);
-                  }
-                  else if (*input[i] == '+' || *input[i] == '-' || *input[i] == '/' ||  *input[i] == '**') {
-                          if (!isdigit(*input[i+1])) {
-                                  cout << "Error: invalid input\n";
-                                  return nullptr;
-                          }
-			}
-                  else {
-                          operations.push(input[i]);
-                  }
-                  }
-  
-  
-                  output.push(operands.front());
-                  operands.pop();
-                  while(!operations.empty()){
-                          Base* val1 = output.front();
-                          output.pop();
-                          Base* val2 = operands.front();
-                          operands.pop();
-                          Base* answer;
-  
-                          if(operations.front() == "+"){
-                                  answer  = new Add(val1, val2);
-                          }
-                          else if(operations.front() == "-"){
-                                  answer  = new Sub(val1, val2);
-                          }
-                          else if(operations.front() == "*"){
-                                  answer  = new Mult(val1, val2);
-                          }
-                          else if(operations.front() == "/"){
-                                  answer = new Div(val1, val2);
-                          }
-                          else if(operations.front() == "**"){
-                                  answer = new Pow(val1, val2);
-                          }
-                          output.push(answer);
-                          operations.pop();
-                          }
-                          return output.front();
-                          output.pop();
-                  }
-                  //return output.front();        
-          };
-#endif //__FACTORY_HPP__
+}
+ /**
+ *  * The purpose is to have the Base parse to pass on a past(a) value
+ *   * it's operator and it's current(b) value
+ *    * For example a \operator b
+ *     * In which this class will handle the dynamic input from the user
+ *      */
+    Base* calculate(Base* prevValue, Base* curValue, char operand)
+    {
+        switch(operand)
+        {
+           case '-' :
+             return new Sub(prevValue, curValue);
+             break;
+
+           case '+' :
+             return new Add(prevValue, curValue);
+             break;
+
+           case '*' :
+             return new Mult(prevValue, curValue);
+             break;
+
+          case '/' :
+            return new Div(prevValue, curValue);
+            break;
+	  
+	  case '^':
+	    return new Pow(prevValue, curValue);
+	    break;
+
+          default :
+            return NULL;
+
+        }
+
+    }
+ /**
+ *  *Just checks if the string pass by Base parse is 
+ *   *a number or not
+ *    */
+   bool is_number(string str){
+     for(int i = 0;i < (strlen(str.c_str()) - 1);i++) {
+		if(isdigit(str[i]) == false) return false;
+	}
+	return true;
+   }
+
+};
+
+#endif //__FACTORY_HPP

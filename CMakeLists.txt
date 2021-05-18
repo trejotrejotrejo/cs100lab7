@@ -5,7 +5,8 @@ SET(CMAKE_CXX_STANDARD 11)
 ADD_SUBDIRECTORY(googletest)
 
 ADD_EXECUTABLE(test
-	header/factorytest.hpp
+	tests/factory_test.hpp
+	tests/unit_test.cpp
 )
 
 ADD_EXECUTABLE(calculator
