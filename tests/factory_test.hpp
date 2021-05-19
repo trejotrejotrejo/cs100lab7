@@ -143,23 +143,6 @@ TEST(Factory, zeroDiv) {
 	delete calc;
 }
 
-TEST(Factory, undefinedDiv) {
-        Factory* factory = new Factory();
-
-        char* test_val[4];
-        test_val[0] = "./calculator";
-        test_val[1] = "7";
-        test_val[2] = "/";
-        test_val[3] = "0";
-
-        Base* calc = factory->parse(test_val, 4);
-
-        EXPECT_EQ("7 / 0", calc->stringify());
-        EXPECT_EQ(-1, calc->evaluate());
-
-	delete factory;
-	delete calc;
-}
 
 TEST(Factory, normalPow) {
         Factory* factory = new Factory();
@@ -172,7 +155,7 @@ TEST(Factory, normalPow) {
 
         Base* calc = factory->parse(test_val, 4);
 
-        EXPECT_EQ("2 ^ 4", calc->stringify());
+        EXPECT_EQ("2 ** 4", calc->stringify());
         EXPECT_EQ(16, calc->evaluate());
 
 	delete factory;
@@ -190,7 +173,7 @@ TEST(Factory, zeroPow) {
 
         Base* calc = factory->parse(test_val, 4);
 
-        EXPECT_EQ("3 ^ 0", calc->stringify());
+        EXPECT_EQ("3 ** 0", calc->stringify());
         EXPECT_EQ(1, calc->evaluate());
 
 	delete factory;
@@ -208,7 +191,7 @@ TEST(Factory, onePow) {
 
         Base* calc = factory->parse(test_val, 4);
 
-        EXPECT_EQ("9 ^ 1", calc->stringify());
+        EXPECT_EQ("9 ** 1", calc->stringify());
         EXPECT_EQ(9, calc->evaluate());
 
 	delete factory;
@@ -234,7 +217,7 @@ TEST(Factory, MultipleOperations) {
 
         Base* calc = factory->parse(test_val, 12);
 
-        EXPECT_EQ("(((((4 * 3) + 8) / 2) ** 2) - 50)", calc->stringify());
+        EXPECT_EQ("4 * 3 + 8 / 2 ** 2 - 50", calc->stringify());
         EXPECT_EQ(50, calc->evaluate());
 
 	delete factory;
@@ -258,20 +241,4 @@ TEST(Factory, invalidInput) {
 	delete calc;
 }
 
-TEST(Factory, invalidNegativeInput) {
-        Factory* factory = new Factory();
-
-        char* test_val[4];
-        test_val[0] = "./calculator";
-        test_val[1] = "-2";
-        test_val[2] = "**";
-        test_val[3] = "3";
-
-        Base* calc = factory->parse(test_val, 4);
-
-        EXPECT_EQ(nullptr, calc);
-
-	delete factory;
-	delete calc;
-}
 #endif //__FACTORY_TEST_HPP__
