@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+using namespace std;
 
 class Pow : public Base {
         private:
@@ -15,15 +16,15 @@ class Pow : public Base {
                 Base* rightChild = NULL;
         public:
                 Pow(Base* left, Base* right) {
-                        leftChild = left;
-                        rightChild = right;
+                       this->leftChild = left;
+                       this->rightChild = right;
                 }
                 virtual double evaluate() {
                         return pow(leftChild->evaluate(), rightChild->evaluate()); 
                 }
                 virtual std::string stringify() {
-                        std::stringstream out;
-                        out << leftChild->evaluate() << " ^ " << rightChild->evaluate();
+                        ostringstream out;
+                        out << setprecision(5) << leftChild->stringify() << " ** " << rightChild->stringify();
                         return out.str();
                 }
 };

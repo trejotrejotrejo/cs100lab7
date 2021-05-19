@@ -4,7 +4,9 @@
  #include "base.hpp"
  #include "op.hpp"
  #include <string>
- #include <iostream>
+ #include <sstream>
+#include <iomanip>
+using namespace std;
  
  class Div : public Base {
           private:
@@ -12,15 +14,15 @@
                  Base* rightChild = NULL;
           public:
                   Div(Base* left, Base* right) {
-                          leftChild = left;
-                          rightChild = right;
+                          this->leftChild = left;
+                         this->rightChild = right;
                   }
                   virtual double evaluate() {
                           return leftChild->evaluate() / rightChild->evaluate();
                   }
                   virtual std::string stringify() {
                           std::stringstream out;
-                          out  << leftChild->stringify() << " / " << rightChild->stringify();
+		          out  << setprecision(5) << leftChild->stringify() << " / " << rightChild->stringify();
                           return out.str();
                   }
  };
