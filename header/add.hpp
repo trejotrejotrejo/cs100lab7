@@ -21,7 +21,7 @@
                   }
                   virtual std::string stringify() {
                           std::stringstream out;
-                          out  << leftChild->stringify() << " + " << rightChild->stringify();
+                          out  << std::setprecision(5) << leftChild->stringify() << " + " << rightChild->stringify();
                           return out.str();
                   }
  };
