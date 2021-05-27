@@ -241,4 +241,16 @@ TEST(Factory, invalidInput) {
 	delete calc;
 }
 
+TEST(Factory, invalidNegativeInput) {
+	Factory* factory = new Factory();
+	char* test_val[4];
+	test_val[0] = "./calculator";
+	test_val[1] = "-9";
+	test_val[2] = "^";
+	test_val[3] = "8";
+
+	Base* calc = factory->parse(test_val, 4);
+	EXPECT_EQ(nullptr, calc);
+}
+
 #endif //__FACTORY_TEST_HPP__
