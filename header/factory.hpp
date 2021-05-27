@@ -20,26 +20,29 @@ using namespace std;
 
 class Factory {
     public:
-        Factory(){}
-
+        Factory() {}
+	
         Base* parse(char** input, int length){
-            if (length <= 1 || length % 2 != 0){
-                return nullptr;
-            }
+           
             stack<Base*> OperandStack;
             stack<string> OperatorStack;
-            for (int i = length - 1; i >= 1; i--){
-                if (is_number(input[i])){
-                    OperandStack.push(new Op(stod(input[i])));
-                }
-                else {
-                    OperatorStack.push(input[i]);
-                }
-            }
-			if (OperandStack.size() <= OperatorStack.size()){
-				return nullptr;
+           stack<Base*> OutputStack;  
+	  for (int i = length - 1; i >= 1; i--){
+                if (isdigit(*input[i])) {
+                    int val = stoi(input[i]);
+		    Base* temp = new Op(val);
+		    OperandStack.push(temp);
+		}
+		else if (*input[i] == '+' || *input[i] == '-' || *input[i] == '*' || *input[i] == '/' || *input[i] == '**') {	;
+			if(!isdigit(*input[i+1])) {
+				cout <<"Error: invalid input\n";
+		 		return nullptr;
 			}
-            while (!OperatorStack.empty()){
+			else {
+				OperatorStack.push(input[i]);
+			}
+		}
+	    }						                  								     while (!OperatorStack.empty()){
                 string temp = OperatorStack.top();
                 Base* lC = OperandStack.top();
                 OperandStack.pop();
@@ -61,7 +64,7 @@ class Factory {
                     OperandStack.push(new Pow(lC, rC));
                 }
                 else {
-                    return nullptr;
+		    return nullptr;
                 }
                 OperatorStack.pop();
             }
@@ -71,7 +74,7 @@ class Factory {
         bool is_number(const std::string s){
             char* end = nullptr;
             double val = strtod(s.c_str(), &end);
-            return end != s.c_str() && *end == '\0' && val != HUGE_VAL;
+            return end != s.c_str() && *end == '\0' && val != HUGE_VAL; //macro constant that expands to a double positive expression
         }
 };
 
